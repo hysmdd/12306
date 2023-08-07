@@ -1,2 +1,4 @@
 server:
   port: 17676
+  servlet:
+    context-path: /member
