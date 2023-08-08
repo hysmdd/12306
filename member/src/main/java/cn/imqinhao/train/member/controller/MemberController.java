@@ -2,9 +2,7 @@ package cn.imqinhao.train.member.controller;
 
 import cn.imqinhao.train.member.service.MemberService;
 import jakarta.annotation.Resource;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Martis
@@ -20,6 +18,11 @@ public class MemberController {
     @GetMapping("/count")
     public Integer count() {
         return memberService.count();
+    }
+
+    @PostMapping("/register")
+    public Long register(String mobile) {
+        return memberService.register(mobile);
     }
 
 }
