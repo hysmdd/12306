@@ -1,4 +1,4 @@
-package cn.imqinhao.train.member.aspect;
+package cn.imqinhao.train.common.aspect;
 
 import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson.JSONObject;
@@ -21,11 +21,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
-/**
- * 日志增强
- * @author Martis
- * @create 2023-08-08 11:24:24
- */
 @Aspect
 @Component
 public class LogAspect {
@@ -37,8 +32,6 @@ public class LogAspect {
 
     /**
      * 定义一个切点
-     * @author :Martis
-     * @create :2023-08-08 11:24:57
      */
     @Pointcut("execution(public * cn.imqinhao..*Controller.*(..))")
     public void controllerPointcut() {

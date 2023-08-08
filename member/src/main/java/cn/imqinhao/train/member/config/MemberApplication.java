@@ -12,7 +12,7 @@ import org.springframework.core.env.Environment;
  * @create 2023-08-07 20:56:15
  */
 @SpringBootApplication
-@ComponentScan("cn.imqinhao.train.member")
+@ComponentScan("cn.imqinhao")
 public class MemberApplication {
 
     private static final Logger LOG = LoggerFactory.getLogger(MemberApplication.class);
@@ -22,5 +22,6 @@ public class MemberApplication {
         Environment env = app.run(args).getEnvironment();
         LOG.info("启动成功！！");
         LOG.info("测试地址：\thttp://127.0.0.1:{}{}", env.getProperty("server.port"), env.getProperty("server.servlet.context-path"));
+
     }
 }
