@@ -1,7 +1,9 @@
 package cn.imqinhao.train.member.service;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.jwt.JWTUtil;
 import cn.imqinhao.train.common.exception.BusinessException;
 import cn.imqinhao.train.common.exception.BusinessExceptionEnum;
 import cn.imqinhao.train.common.util.SnowUtil;
@@ -16,10 +18,10 @@ import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Martis
@@ -111,8 +113,11 @@ public class MemberService {
         if (!"8888".equals(code)) {
             throw new BusinessException(BusinessExceptionEnum.MEMBER_MOBILE_CODE_ERROR);
         }
-        MemberLoginResp memberLoginResp = new MemberLoginResp();
-        BeanUtils.copyProperties(memberDB, memberLoginResp);
+        MemberLoginResp memberLoginResp = BeanUtil.copyProperties(memberDB, MemberLoginResp.class);
+        Map<String, Object> map = BeanUtil.beanToMap(memberLoginResp);
+        String key = "Martis12306";
+        String token = JWTUtil.createToken(map, key.getBytes());
+        memberLoginResp.setToken(token);
         return memberLoginResp;
     }
 
