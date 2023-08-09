@@ -1,4 +1,4 @@
-package cn.imqinhao.train.common.util;
+package cn.imqinhao.train.getaway.util;
 
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateTime;
