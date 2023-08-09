@@ -4,7 +4,7 @@
     <div style="float: right;color: #fff">
       您好：{{member.mobile}} &nbsp;&nbsp;
       <router-link to="/login">
-        退出登录
+        <span style="color: #fff;">退出登录</span>
       </router-link>
     </div>
     <a-menu
