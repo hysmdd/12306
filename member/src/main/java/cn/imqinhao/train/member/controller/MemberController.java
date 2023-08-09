@@ -35,7 +35,7 @@ public class MemberController {
      * @return 注册id
      */
     @PostMapping("/register")
-    public CommonResp<Long> register(@Valid MemberRegisterReq req) {
+    public CommonResp<Long> register(@Valid @RequestBody MemberRegisterReq req) {
         Long registerId = memberService.register(req);
         return new CommonResp<>(registerId);
     }
@@ -48,7 +48,7 @@ public class MemberController {
      * @return 短信验证码
      */
     @PostMapping("/send-code")
-    public CommonResp<Long> sendCode(@Valid MemberSendCodeReq req) {
+    public CommonResp<Long> sendCode(@Valid @RequestBody MemberSendCodeReq req) {
         memberService.sendCode(req);
         return new CommonResp<>();
     }
@@ -61,7 +61,7 @@ public class MemberController {
      * @return
      */
     @PostMapping("/login")
-    public CommonResp<MemberLoginResp> login(@Valid MemberLoginReq req) {
+    public CommonResp<MemberLoginResp> login(@Valid @RequestBody MemberLoginReq req) {
         MemberLoginResp resp = memberService.login(req);
         return new CommonResp<>(resp);
     }
