@@ -2,10 +2,17 @@
   <div class="btn">
     <a-space>
       <a-button type="primary" @click="handleQuery()">刷新</a-button>
-      <a-button type="primary" @click="showModal">新增</a-button>
+      <a-button type="primary" @click="onAdd">新增</a-button>
     </a-space>
   </div>
   <a-table :data-source="passengers" :columns="columns" :pagination="pagination" @change="handleTableChange" :loading="loading">
+    <template #bodyCell="{column, record}">
+      <template v-if="column.dataIndex === 'operation'">
+        <a-space>
+          <a @click="onEdit(record)">编辑</a>
+        </a-space>
+      </template>
+    </template>
   </a-table>
   <a-modal v-model:open="visible" title="乘车人" @ok="handleOk" ok-text="确认" cancel-text="取消">
     <a-form :model="passenger" :label-col="{span: 4}" :wrapper-col="{ span: 20 }">
@@ -50,8 +57,12 @@ export default defineComponent({
         dataIndex: 'type',
         key: 'type',
       },
+      {
+        title: '操作',
+        dataIndex: 'operation'
+      }
     ]
-    const passenger = reactive({
+    const passenger = ref({
       id: undefined,
       memberId: undefined,
       name: undefined,
@@ -92,25 +103,34 @@ export default defineComponent({
         }
       })
     }
-    const showModal = () => {
+    const onAdd = () => {
+      visible.value = true
+    }
+    const onEdit = (record) => {
+      passenger.value = record
       visible.value = true
     }
     const handleOk = e => {
       console.log(e)
       console.log(passenger)
-      axios.post("/member/passenger/save", passenger).then(res => {
+      axios.post("/member/passenger/save", passenger.value).then(res => {
         let data = res.data
         if (data.success) {
           // 保存成功
-          notification.success({description: "乘车人添加成功"})
+          if (passenger.value.id) {
+            notification.success({description: "乘车人修改成功"})
+          } else {
+            notification.success({description: "乘车人添加成功"})
+          }
           visible.value = false
           handleQuery({
             page: pagination.current,
             size: pagination.pageSize
           })
-          passenger.name=undefined
-          passenger.type=undefined
-          passenger.idCard=undefined
+          passenger.value.name = undefined
+          passenger.value.type = undefined
+          passenger.value.idCard = undefined
+          passenger.value.id = undefined
         } else {
           // 保存失败
           notification.error({description: data.message})
@@ -131,14 +151,16 @@ export default defineComponent({
     })
     return {
       visible,
-      showModal,
+      onAdd,
+      onEdit,
       handleOk,
       passenger,
       columns,
       passengers,
       pagination,
       handleTableChange,
-      handleQuery
+      handleQuery,
+      loading
     };
   },
 });
