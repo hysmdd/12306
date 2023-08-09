@@ -104,10 +104,11 @@ export default defineComponent({
       })
     }
     const onAdd = () => {
+      passenger.value = {}
       visible.value = true
     }
     const onEdit = (record) => {
-      passenger.value = record
+      passenger.value = window.Tool.copy(record)
       visible.value = true
     }
     const handleOk = e => {
@@ -127,10 +128,6 @@ export default defineComponent({
             page: pagination.current,
             size: pagination.pageSize
           })
-          passenger.value.name = undefined
-          passenger.value.type = undefined
-          passenger.value.idCard = undefined
-          passenger.value.id = undefined
         } else {
           // 保存失败
           notification.error({description: data.message})
