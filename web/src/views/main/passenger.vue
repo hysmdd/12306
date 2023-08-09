@@ -1,5 +1,7 @@
 <template>
-  <a-button type="primary" @click="showModal">新增</a-button>
+  <div class="btn"><a-button type="primary" @click="showModal">新增</a-button></div>
+  <a-table :data-source="dataSource" :columns="columns">
+  </a-table>
   <a-modal v-model:visible="visible" title="乘车人" @ok="handleOk" ok-text="确认" cancel-text="取消">
     <a-form :model="passenger" :label-col="{span: 4}" :wrapper-col="{ span: 20 }">
       <a-form-item label="姓名">
@@ -26,6 +28,39 @@ import {notification} from "ant-design-vue";
 export default defineComponent({
   setup() {
     const visible = ref(false)
+    const dataSource = [
+      {
+        key: '1',
+        name: '胡彦斌',
+        age: 32,
+        address: '西湖区湖底公园1号',
+      },
+      {
+        key: '2',
+        name: '胡彦祖',
+        age: 42,
+        address: '西湖区湖底公园1号',
+      },
+    ]
+
+    const columns = [
+      {
+        title: '姓名',
+        dataIndex: 'name',
+        key: 'name',
+      },
+      {
+        title: '年龄',
+        dataIndex: 'age',
+        key: 'age',
+      },
+      {
+        title: '住址',
+        dataIndex: 'address',
+        key: 'address',
+      },
+    ]
+
     const passenger = reactive({
       id: undefined,
       memberId: undefined,
@@ -57,10 +92,15 @@ export default defineComponent({
       visible,
       showModal,
       handleOk,
-      passenger
+      passenger,
+      columns,
+      dataSource
     };
   },
 });
 </script>
-<style>
+<style scoped>
+.btn {
+  margin-bottom: 20px;
+}
 </style>
