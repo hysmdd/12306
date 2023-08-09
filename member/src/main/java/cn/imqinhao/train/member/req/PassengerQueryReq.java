@@ -1,6 +1,8 @@
 package cn.imqinhao.train.member.req;
 
-public class PassengerQueryReq {
+import cn.imqinhao.train.common.req.PageReq;
+
+public class PassengerQueryReq extends PageReq {
 
     private Long memberId;
 
