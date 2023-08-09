@@ -39,6 +39,7 @@
 
 <script>
 import { defineComponent, reactive } from 'vue';
+import axios from 'axios'
 export default defineComponent({
   name: "login-view",
   setup() {
@@ -52,10 +53,18 @@ export default defineComponent({
     const onFinishFailed = errorInfo => {
       console.log('Failed:', errorInfo);
     };
+    const sendCode = () => {
+      axios.post('http://localhost:20000/member/member/send-code', {
+        mobile: loginForm.mobile
+      }).then(res => {
+        console.log(res)
+      })
+    }
     return {
       loginForm,
       onFinish,
       onFinishFailed,
+      sendCode
     };
   },
 });
