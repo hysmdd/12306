@@ -42,6 +42,7 @@ import { defineComponent, reactive } from 'vue';
 import axios from 'axios'
 import { notification } from "ant-design-vue";
 import { useRouter } from "vue-router";
+import store from "@/store";
 
 export default defineComponent({
   name: "login-view",
@@ -58,7 +59,7 @@ export default defineComponent({
         // console.log(res)
         if(res.data.success) {
           notification.success({description: "发送验证码成功！"})
-          loginForm.code = '8888'
+          loginForm.code = '1314'
         } else {
           notification.error({description: res.data.message})
         }
@@ -73,6 +74,8 @@ export default defineComponent({
           notification.success({ description: "登录成功" })
           // 登录成功，跳转到控台主页
           router.push('/')
+          // 保存登录信息
+          store.commit('setMember', res.data.content)
         } else {
           notification.error({description: res.data.message})
         }
