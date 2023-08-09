@@ -23,9 +23,15 @@ POST http://localhost:20000/member/member/login
 Content-Type: application/json
 
 {
-  "mobile": "18565632287",
-  "code": "8888"
+  "mobile": "15697204255",
+  "code": "1314"
 }
+
+> {%
+client.log(JSON.stringify(response.body))
+client.log(JSON.stringify(response.body.content.token))
+client.global.set("token", response.body.content.token)
+ %}
 
 ###
 

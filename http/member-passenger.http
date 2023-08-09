@@ -1,9 +1,10 @@
 POST http://localhost:20000/member/passenger/save
 Content-Type: application/json
+token: {{token}}
 
 {
-  "memberId": "1689073542949376000",
-  "name": "覃浩",
-  "idCard": "111222333444555666",
+  "memberId": "1688860788032409600",
+  "name": "覃曼",
+  "idCard": "420528200005293526",
   "type": "1"
 }
