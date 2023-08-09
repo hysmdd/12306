@@ -1,5 +1,10 @@
 <template>
-  <div class="btn"><a-button type="primary" @click="showModal">新增</a-button></div>
+  <div class="btn">
+    <a-space>
+      <a-button type="primary" @click="handleQuery()">刷新</a-button>
+      <a-button type="primary" @click="showModal">新增</a-button>
+    </a-space>
+  </div>
   <a-table :data-source="passengers" :columns="columns" :pagination="pagination" @change="handleTableChange">
   </a-table>
   <a-modal v-model:visible="visible" title="乘车人" @ok="handleOk" ok-text="确认" cancel-text="取消">
@@ -58,10 +63,16 @@ export default defineComponent({
     const pagination = reactive({
       total: 0,
       current: 1,
-      pageSize: 2
+      pageSize: 5
     })
 
     const handleQuery = (param) => {
+      if (!param) {
+        param = {
+          page: 1,
+          size: pagination.pageSize
+        }
+      }
       axios.get('/member/passenger/query-list', {
         params: {
           page: param.page,
@@ -90,6 +101,10 @@ export default defineComponent({
           // 保存成功
           notification.success({description: "乘车人添加成功"})
           visible.value = false
+          handleQuery()
+          passenger.name=undefined
+          passenger.type=undefined
+          passenger.idCard=undefined
         } else {
           // 保存失败
           notification.error({description: data.message})
@@ -105,7 +120,7 @@ export default defineComponent({
     onMounted(() => {
       handleQuery({
         page: 1,
-        size: 2
+        size: 5
       })
     })
     return {
@@ -116,7 +131,8 @@ export default defineComponent({
       columns,
       passengers,
       pagination,
-      handleTableChange
+      handleTableChange,
+      handleQuery
     };
   },
 });
