@@ -11,6 +11,7 @@ import cn.imqinhao.train.member.mapper.PassengerMapper;
 import cn.imqinhao.train.member.req.PassengerQueryReq;
 import cn.imqinhao.train.member.req.PassengerSaveReq;
 import cn.imqinhao.train.member.resp.PassengerQueryResp;
+import com.github.pagehelper.PageHelper;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +57,7 @@ public class PassengerService {
         if (ObjectUtil.isNotNull(memberId)) {
             criteria.andMemberIdEqualTo(memberId);
         }
+        PageHelper.startPage(2, 2);
         List<Passenger> passengers = passengerMapper.selectByExample(passengerExample);
         return BeanUtil.copyToList(passengers, PassengerQueryResp.class);
     }

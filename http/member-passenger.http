@@ -3,7 +3,7 @@ Content-Type: application/json
 token: {{token}}
 
 {
-  "memberId": "1688860993637191680",
+  "memberId": "1689073542949376000",
   "name": "敖雯昕",
   "idCard": "360502200011074629",
   "type": "1"

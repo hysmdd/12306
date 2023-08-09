@@ -15,21 +15,14 @@
 import { defineComponent, ref } from 'vue';
 import TheHeaderView from "@/components/the-header.vue";
 import TheSiderView from "@/components/the-sider.vue";
-import axios from "axios";
 export default defineComponent({
   components: {
     TheSiderView,
     TheHeaderView,
   },
   setup() {
-    const count = ref(0)
-    axios.get("/member/member/count").then(res => {
-      count.value = res.data.content
-    })
     return {
-      collapsed: ref(false),
-      openKeys: ref(['sub1']),
-      count
+      collapsed: ref(false)
     };
   },
 });
