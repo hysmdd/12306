@@ -7,7 +7,7 @@
   </div>
   <a-table :data-source="passengers" :columns="columns" :pagination="pagination" @change="handleTableChange" :loading="loading">
   </a-table>
-  <a-modal v-model:visible="visible" title="乘车人" @ok="handleOk" ok-text="确认" cancel-text="取消">
+  <a-modal v-model:open="visible" title="乘车人" @ok="handleOk" ok-text="确认" cancel-text="取消">
     <a-form :model="passenger" :label-col="{span: 4}" :wrapper-col="{ span: 20 }">
       <a-form-item label="姓名">
         <a-input v-model:value="passenger.name"/>
@@ -104,7 +104,10 @@ export default defineComponent({
           // 保存成功
           notification.success({description: "乘车人添加成功"})
           visible.value = false
-          handleQuery()
+          handleQuery({
+            page: pagination.current,
+            size: pagination.pageSize
+          })
           passenger.name=undefined
           passenger.type=undefined
           passenger.idCard=undefined
