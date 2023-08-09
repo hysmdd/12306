@@ -72,7 +72,9 @@ export default defineComponent({
       },
       {
         title: '操作',
-        dataIndex: 'operation'
+        dataIndex: 'operation',
+        width: 150,
+        align: 'center'
       }
     ]
     const passenger = ref({
