@@ -8,3 +8,18 @@ spring:
           predicates:
             - Path=/member/**
           uri: http://127.0.0.1:17676
+      globalcors:
+        cors-configurations:
+          '[/**]':  # 允许哪些网站的跨域请求 allowedOrigins: “*” 允许所有网站
+            allowed-origin-patterns:
+              - "*"
+            allowed-headers: "*"
+            allowed-methods:  # 允许的跨域ajax的请求方式 “*” 允许所有
+              - "GET"
+              - "POST"
+              - "DELETE"
+              - "PUT"
+              - "OPTIONS"
+            allowCredentials: true # 是否允许携带cookie
+            maxAge: 360000  # 这次跨域检测的有效期
+        add-to-simple-url-handler-mapping: true # 解决options请求被拦截问题
