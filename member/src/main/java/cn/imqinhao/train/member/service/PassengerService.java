@@ -98,4 +98,13 @@ public class PassengerService {
         return objectPageResp;
     }
 
+    /**
+     * 根据id删除乘车人
+     * @author :Martis
+     * @create :2023-08-09 20:55:46
+     * @param id 乘车人id
+     */
+    public void delete(Long id) {
+        passengerMapper.deleteByPrimaryKey(id);
+    }
 }
