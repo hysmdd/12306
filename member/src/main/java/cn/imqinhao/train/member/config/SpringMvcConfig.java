@@ -1,5 +1,6 @@
 package cn.imqinhao.train.member.config;
 
+import cn.imqinhao.train.common.interceptor.LogInterceptor;
 import cn.imqinhao.train.common.interceptor.MemberInterceptor;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Configuration;
@@ -12,8 +13,13 @@ public class SpringMvcConfig implements WebMvcConfigurer {
    @Resource
    MemberInterceptor memberInterceptor;
 
+   @Resource
+    LogInterceptor logInterceptor;
+
    @Override
    public void addInterceptors(InterceptorRegistry registry) {
+
+       registry.addInterceptor(logInterceptor);
 
        registry.addInterceptor(memberInterceptor)
                .addPathPatterns("/**")
