@@ -5,7 +5,7 @@
       <a-button type="primary" @click="showModal">新增</a-button>
     </a-space>
   </div>
-  <a-table :data-source="passengers" :columns="columns" :pagination="pagination" @change="handleTableChange">
+  <a-table :data-source="passengers" :columns="columns" :pagination="pagination" @change="handleTableChange" :loading="loading">
   </a-table>
   <a-modal v-model:visible="visible" title="乘车人" @ok="handleOk" ok-text="确认" cancel-text="取消">
     <a-form :model="passenger" :label-col="{span: 4}" :wrapper-col="{ span: 20 }">
@@ -33,6 +33,7 @@ import {notification} from "ant-design-vue";
 export default defineComponent({
   setup() {
     const visible = ref(false)
+    const loading = ref(false)
     const columns = [
       {
         title: '姓名',
@@ -73,12 +74,14 @@ export default defineComponent({
           size: pagination.pageSize
         }
       }
+      loading.value = true
       axios.get('/member/passenger/query-list', {
         params: {
           page: param.page,
           size: param.size
         }
       }).then(res => {
+        loading.value = false
         let data = res.data
         if(data.success) {
           passengers.value = data.content.list
