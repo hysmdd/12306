@@ -23,22 +23,15 @@ import java.util.List;
 
 /**
  * @author Martis
- * @create 2023-08-09 15:19:47
  */
 @Service
 public class PassengerService {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(PassengerService.class);
 
     @Resource
     private PassengerMapper passengerMapper;
 
-    /**
-     * 添加乘车人
-     * @author :Martis
-     * @create :2023-08-09 17:23:42
-     * @param req 乘车人信息
-     */
     public void save(PassengerSaveReq req) {
         DateTime now = DateTime.now();
         Passenger passenger = BeanUtil.copyProperties(req, Passenger.class);
@@ -56,54 +49,27 @@ public class PassengerService {
         }
     }
 
-    /**
-     * 查询乘车人
-     * @author :Martis
-     * @create :2023-08-09 17:25:44
-     * @param req 查询条件
-     * @return 乘车人
-     */
     public PageResp<PassengerQueryResp> queryList(PassengerQueryReq req) {
-        // 获取会员ID
         Long memberId = req.getMemberId();
-        // 构造条件
         PassengerExample passengerExample = new PassengerExample();
         PassengerExample.Criteria criteria = passengerExample.createCriteria();
-        // 如果会员ID不为空
         if (ObjectUtil.isNotNull(memberId)) {
-            // 添加条件
             criteria.andMemberIdEqualTo(memberId);
         }
-        // 打印日志
         LOG.info("查询页码：{}", req.getPage());
         LOG.info("每页条数：{}", req.getSize());
-        // 分页查询
         PageHelper.startPage(req.getPage(), req.getSize());
-        // 根据条件查询会员列表
         List<Passenger> passengers = passengerMapper.selectByExample(passengerExample);
-        // 构造分页对象
         PageInfo<Passenger> pageInfo = new PageInfo<>(passengers);
-        // 打印日志
         LOG.info("总行数：{}", pageInfo.getTotal());
         LOG.info("总页数：{}", pageInfo.getPages());
-        // 拷贝对象
         List<PassengerQueryResp> list = BeanUtil.copyToList(passengers, PassengerQueryResp.class);
-        // 构造返回数据
         PageResp<PassengerQueryResp> objectPageResp = new PageResp<>();
-        // 设置匹配的会员总数量
         objectPageResp.setTotal(pageInfo.getTotal());
-        // 封装数据
         objectPageResp.setList(list);
-        // 返回数据
         return objectPageResp;
     }
 
-    /**
-     * 根据id删除乘车人
-     * @author :Martis
-     * @create :2023-08-09 20:55:46
-     * @param id 乘车人id
-     */
     public void delete(Long id) {
         passengerMapper.deleteByPrimaryKey(id);
     }
