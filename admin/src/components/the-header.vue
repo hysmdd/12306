@@ -54,8 +54,6 @@ export default defineComponent({
   float: left;
   height: 31px;
   width: 150px;
-  color: white;
-  font-size: 20px
-;
+  font-size: 20px;
 }
 </style>
