@@ -17,7 +17,7 @@ public class PassengerQueryReq extends PageReq {
     @Override
     public String toString() {
         return "PassengerQueryReq{" +
-                "memberId=" + memberId +
+                "memberId='" + memberId + '\'' +
                 '}';
     }
 }

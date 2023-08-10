@@ -83,7 +83,9 @@ public class ServerGenerator {
 
         // generate(Domain, param, "service", "service");
         // generate(Domain, param, "controller", "controller);
-        generate(Domain, param, "req", "saveReq");
+        // generate(Domain, param, "req", "saveReq");
+        generate(Domain, param, "req", "queryReq");
+        generate(Domain, param, "resp", "queryResp");
     }
 
     /**
