@@ -19,6 +19,8 @@ import java.util.*;
  */
 public class ServerGenerator {
 
+    static boolean readOnly = false;
+    static String vuePath = "web/src/views/main/";
     static String serverPath = "[module]/src/main/java/cn/imqinhao/train/[module]/";
     static String pomPath = "generator/pom.xml";
 
@@ -79,13 +81,15 @@ public class ServerGenerator {
         param.put("tableNameCn", tableNameCn);
         param.put("fieldList", fieldList);
         param.put("typeSet", typeSet);
+        param.put("readOnly", readOnly);
         System.out.println("组装参数：" + param);
 
         // generate(Domain, param, "service", "service");
         // generate(Domain, param, "controller", "controller);
         // generate(Domain, param, "req", "saveReq");
-        generate(Domain, param, "req", "queryReq");
-        generate(Domain, param, "resp", "queryResp");
+        // generate(Domain, param, "req", "queryReq");
+        // generate(Domain, param, "resp", "queryResp");
+        generateVue(do_main, param);
     }
 
     /**
@@ -102,6 +106,14 @@ public class ServerGenerator {
             set.add(field.getJavaType());
         }
         return set;
+    }
+
+    public static void generateVue(String do_main, Map<String, Object> param) throws TemplateException, IOException {
+        FreemarkerUtil.initConfig("vue.ftl");
+        new File(vuePath).mkdirs();
+        String fileName = vuePath + do_main + ".vue";
+        System.out.println("开始生成：" + fileName);
+        FreemarkerUtil.generator(fileName, param);
     }
 
     private static void generate(String Domain, Map<String, Object> param, String packageName, String target) throws IOException, TemplateException {
