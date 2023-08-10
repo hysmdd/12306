@@ -18,11 +18,11 @@ import java.util.Map;
  */
 public class ServerGenerator {
 
-    static String servicePath = "[module]/src/main/java/cn/imqinhao/train/[module]/service/";
+    static String serverPath = "[module]/src/main/java/cn/imqinhao/train/[module]/";
     static String pomPath = "generator/pom.xml";
 
     static {
-        new File(servicePath).mkdirs();
+        new File(serverPath).mkdirs();
     }
 
     public static void main(String[] args) throws TemplateException, IOException, DocumentException {
@@ -35,8 +35,8 @@ public class ServerGenerator {
         String generatorPath = getGeneratorPath();
         String module = generatorPath.replace("src/main/resources/generator-config-", "").replace(".xml", "");
         System.out.println("module: " + module);
-        servicePath = servicePath.replace("[module]", module);
-        System.out.println("servicePath: " + servicePath);
+        serverPath = serverPath.replace("[module]", module);
+        System.out.println("servicePath: " + serverPath);
         // 读取table节点
         Document document = new SAXReader().read("generator/" + generatorPath);
         Node table = document.selectSingleNode("//table");
@@ -60,8 +60,18 @@ public class ServerGenerator {
         param.put("do_main", do_main);
         System.out.println("组装参数：" + param);
 
-        FreemarkerUtil.initConfig("service.ftl");
-        FreemarkerUtil.generator(servicePath + Domain + "Service.java", param);
+        generate(Domain, param, "service");
+        generate(Domain, param, "controller");
+    }
+
+    private static void generate(String Domain, Map<String, Object> param, String target) throws IOException, TemplateException {
+        FreemarkerUtil.initConfig(target + ".ftl");
+        String Target = target.substring(0, 1).toUpperCase() + target.substring(1);
+        String toPath = serverPath + target + "/";
+        new File(toPath).mkdirs();
+        String fileName = toPath + Domain + Target + ".java";
+        System.out.println("开始生成：" + fileName);
+        FreemarkerUtil.generator(fileName, param);
     }
 
     private static String getGeneratorPath() throws DocumentException {
