@@ -1,4 +1,4 @@
-package cn.imqinhao.train.member.service;
+package cn.imqinhao.train.${module}.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
@@ -6,12 +6,12 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.imqinhao.train.common.context.LoginMemberContext;
 import cn.imqinhao.train.common.resp.PageResp;
 import cn.imqinhao.train.common.util.SnowUtil;
-import cn.imqinhao.train.member.domain.${Domain};
-import cn.imqinhao.train.member.domain.${Domain}Example;
-import cn.imqinhao.train.member.mapper.${Domain}Mapper;
-import cn.imqinhao.train.member.req.${Domain}QueryReq;
-import cn.imqinhao.train.member.req.${Domain}SaveReq;
-import cn.imqinhao.train.member.resp.${Domain}QueryResp;
+import cn.imqinhao.train.${module}.domain.${Domain};
+import cn.imqinhao.train.${module}.domain.${Domain}Example;
+import cn.imqinhao.train.${module}.mapper.${Domain}Mapper;
+import cn.imqinhao.train.${module}.req.${Domain}QueryReq;
+import cn.imqinhao.train.${module}.req.${Domain}SaveReq;
+import cn.imqinhao.train.${module}.resp.${Domain}QueryResp;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import jakarta.annotation.Resource;
@@ -50,11 +50,11 @@ public class ${Domain}Service {
     }
 
     public PageResp<${Domain}QueryResp> queryList(${Domain}QueryReq req) {
-        Long memberId = req.getMemberId();
+        Long ${module}Id = req.getMemberId();
         ${Domain}Example ${domain}Example = new ${Domain}Example();
         ${Domain}Example.Criteria criteria = ${domain}Example.createCriteria();
-        if (ObjectUtil.isNotNull(memberId)) {
-            criteria.andMemberIdEqualTo(memberId);
+        if (ObjectUtil.isNotNull(${module}Id)) {
+            criteria.andMemberIdEqualTo(${module}Id);
         }
         LOG.info("查询页码：{}", req.getPage());
         LOG.info("每页条数：{}", req.getSize());
