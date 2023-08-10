@@ -11,9 +11,7 @@ import org.dom4j.io.SAXReader;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Martis
@@ -70,22 +68,44 @@ public class ServerGenerator {
         // 表中文名
         String tableNameCn = DbUtil.getTableComment(tableName.getText());
         List<Field> fieldList = DbUtil.getColumnByTableName(tableName.getText());
+        Set<String> typeSet = getJavaTypes(fieldList);
 
         // 组装参数
         Map<String, Object> param = new HashMap<>();
+        param.put("module", module);
         param.put("Domain", Domain);
         param.put("domain", do_main);
         param.put("do_main", do_main);
+        param.put("tableNameCn", tableNameCn);
+        param.put("fieldList", fieldList);
+        param.put("typeSet", typeSet);
         System.out.println("组装参数：" + param);
 
-        // generate(Domain, param, "service");
-        // generate(Domain, param, "controller");
+        // generate(Domain, param, "service", "service");
+        // generate(Domain, param, "controller", "controller);
+        generate(Domain, param, "req", "saveReq");
     }
 
-    private static void generate(String Domain, Map<String, Object> param, String target) throws IOException, TemplateException {
+    /**
+     * 获取所有的Java类型，使用Set去重
+     * @author :Martis
+     * @create :2023-08-10 14:50:00
+     * @param fieldList
+     * @return
+     */
+    public static Set<String> getJavaTypes(List<Field> fieldList) {
+        Set<String> set = new HashSet<>();
+        for (int i = 0; i < fieldList.size(); i++) {
+            Field field = fieldList.get(i);
+            set.add(field.getJavaType());
+        }
+        return set;
+    }
+
+    private static void generate(String Domain, Map<String, Object> param, String packageName, String target) throws IOException, TemplateException {
         FreemarkerUtil.initConfig(target + ".ftl");
         String Target = target.substring(0, 1).toUpperCase() + target.substring(1);
-        String toPath = serverPath + target + "/";
+        String toPath = serverPath + packageName + "/";
         new File(toPath).mkdirs();
         String fileName = toPath + Domain + Target + ".java";
         System.out.println("开始生成：" + fileName);
