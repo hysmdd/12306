@@ -44,9 +44,15 @@
         <!-- <table tableName="member" domainObjectName="Member"/> -->
         <!-- <table tableName="station" domainObjectName="Station"/> -->
         <!-- <table tableName="train" domainObjectName="Train"/> -->
+<<<<<<< HEAD
+        <table tableName="train_station" domainObjectName="TrainStation"/>
+        <!-- <table tableName="train_carriage" domainObjectName="TrainCarriage"/> -->
+        <!--<table tableName="train_seat" domainObjectName="TrainSeat"/>-->
+=======
         <!-- <table tableName="train_station" domainObjectName="TrainStation"/> -->
         <!-- <table tableName="train_carriage" domainObjectName="TrainCarriage"/> -->
         <table tableName="train_seat" domainObjectName="TrainSeat"/>
+>>>>>>> a2f78cad76d95f0fa363808eb1904ae6edfd6288
         <!--<table tableName="daily_train" domainObjectName="DailyTrain"/>-->
         <!--<table tableName="daily_train_station" domainObjectName="DailyTrainStation"/>-->
         <!--<table tableName="daily_train_carriage" domainObjectName="DailyTrainCarriage"/>-->

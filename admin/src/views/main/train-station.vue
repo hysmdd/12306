@@ -61,7 +61,6 @@ import {notification} from "ant-design-vue";
 import axios from "axios";
 
 export default defineComponent({
-  name: "trainStation-view",
   setup() {
     const visible = ref(false);
     let trainStation = ref({
