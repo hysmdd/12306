@@ -1,0 +1,7 @@
+GET http://localhost:47676/batch/hello
+Accept: application/json
+
+###
+
+GET http://localhost:20000/batch/hello
+Accept: application/json
