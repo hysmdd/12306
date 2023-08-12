@@ -124,7 +124,9 @@ export default defineComponent({
     },
     {
       title: '操作',
-      dataIndex: 'operation'
+      dataIndex: 'operation',
+      align: 'center',
+      width: '10%'
     }
     ];
 
