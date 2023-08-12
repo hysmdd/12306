@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import Antd from 'ant-design-vue';
+import { createFromIconfontCN } from '@ant-design/icons-vue';
 import App from './App.vue'
 import 'ant-design-vue/dist/reset.css';
 import router from './router'
@@ -8,9 +9,13 @@ import * as Icons from '@ant-design/icons-vue'
 import axios from 'axios'
 import('./assets/js/enums')
 
+const IconFont = createFromIconfontCN({
+    scriptUrl: '//at.alicdn.com/t/c/font_4208356_qkl4kivv38.js',
+});
+
 const app = createApp(App)
 app.use(Antd).use(store).use(router).mount('#app')
-
+app.component('IconFont', IconFont)
 // 全局使用图标
 const icons = Icons
 for(const i in icons) {
