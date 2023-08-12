@@ -4,7 +4,7 @@
             @change="onChange" placeholder="请选择车次"
             :style="'width: ' + localWidth">
     <a-select-option v-for="item in trains" :key="item.code" :value="item.code" :label="item.code + item.start + item.end">
-      {{item.code}} {{item.start}} ~ {{item.end}}
+      {{item.code}} | {{item.start}} ~ {{item.end}}
     </a-select-option>
   </a-select>
 </template>
