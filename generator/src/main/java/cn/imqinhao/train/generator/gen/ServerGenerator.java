@@ -19,10 +19,11 @@ import java.util.*;
  */
 public class ServerGenerator {
 
-    static boolean readOnly = true;
+    static boolean readOnly = false;
     static String vuePath = "admin/src/views/main/";
     static String serverPath = "[module]/src/main/java/cn/imqinhao/train/[module]/";
     static String pomPath = "generator/pom.xml";
+    static String module = "";
 
     static {
         new File(serverPath).mkdirs();
@@ -36,7 +37,7 @@ public class ServerGenerator {
         // FreemarkerUtil.generator(toPath + "Test.java", param);
         // 获取mybatis-generator
         String generatorPath = getGeneratorPath();
-        String module = generatorPath.replace("src/main/resources/generator-config-", "").replace(".xml", "");
+        module = generatorPath.replace("src/main/resources/generator-config-", "").replace(".xml", "");
         System.out.println("module: " + module);
         serverPath = serverPath.replace("[module]", module);
         System.out.println("servicePath: " + serverPath);
@@ -84,11 +85,11 @@ public class ServerGenerator {
         param.put("readOnly", readOnly);
         System.out.println("组装参数：" + param);
 
-        // generate(Domain, param, "service", "service");
-        // generate(Domain, param, "controller/admin", "adminController");
-        // generate(Domain, param, "req", "saveReq");
-        // generate(Domain, param, "req", "queryReq");
-        // generate(Domain, param, "resp", "queryResp");
+        generate(Domain, param, "service", "service");
+        generate(Domain, param, "controller/admin", "adminController");
+        generate(Domain, param, "req", "saveReq");
+        generate(Domain, param, "req", "queryReq");
+        generate(Domain, param, "resp", "queryResp");
         generateVue(do_main, param);
     }
 
@@ -110,8 +111,8 @@ public class ServerGenerator {
 
     public static void generateVue(String do_main, Map<String, Object> param) throws TemplateException, IOException {
         FreemarkerUtil.initConfig("vue.ftl");
-        new File(vuePath).mkdirs();
-        String fileName = vuePath + do_main + ".vue";
+        new File(vuePath + module).mkdirs();
+        String fileName = vuePath + module + "/" + do_main + ".vue";
         System.out.println("开始生成：" + fileName);
         FreemarkerUtil.generator(fileName, param);
     }
