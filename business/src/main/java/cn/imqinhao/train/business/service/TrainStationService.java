@@ -1,6 +1,7 @@
 package cn.imqinhao.train.business.service;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import cn.imqinhao.train.business.domain.TrainStation;
@@ -9,6 +10,8 @@ import cn.imqinhao.train.business.mapper.TrainStationMapper;
 import cn.imqinhao.train.business.req.TrainStationQueryReq;
 import cn.imqinhao.train.business.req.TrainStationSaveReq;
 import cn.imqinhao.train.business.resp.TrainStationQueryResp;
+import cn.imqinhao.train.common.exception.BusinessException;
+import cn.imqinhao.train.common.exception.BusinessExceptionEnum;
 import cn.imqinhao.train.common.resp.PageResp;
 import cn.imqinhao.train.common.util.SnowUtil;
 import com.github.pagehelper.PageHelper;
@@ -32,6 +35,17 @@ public class TrainStationService {
         DateTime now = DateTime.now();
         TrainStation trainStation = BeanUtil.copyProperties(req, TrainStation.class);
         if (ObjectUtil.isNull(trainStation.getId())) {
+
+            // 先查询当前站点是否存在
+            TrainStation trainStationDB = selectByUnique(req.getTrainCode(), req.getIndex());
+            if (ObjectUtil.isNotEmpty(trainStationDB)) {
+                throw new BusinessException(BusinessExceptionEnum.BUSINESS_TRAIN_STATION_INDEX_UNIQUE_ERROR);
+            }
+            trainStationDB = selectByUnique(req.getTrainCode(), req.getName());
+            if (ObjectUtil.isNotEmpty(trainStationDB)) {
+                throw new BusinessException(BusinessExceptionEnum.BUSINESS_TRAIN_STATION_NAME_UNIQUE_ERROR);
+            }
+
             trainStation.setId(SnowUtil.getSnowflakeNextId());
             trainStation.setCreateTime(now);
             trainStation.setUpdateTime(now);
@@ -40,6 +54,26 @@ public class TrainStationService {
             trainStation.setUpdateTime(now);
             trainStationMapper.updateByPrimaryKey(trainStation);
         }
+    }
+
+    private TrainStation selectByUnique(String trainCode, Integer index) {
+        TrainStationExample trainCarriageExample = new TrainStationExample();
+        trainCarriageExample.createCriteria().andTrainCodeEqualTo(trainCode).andIndexEqualTo(index);
+        List<TrainStation> list = trainStationMapper.selectByExample(trainCarriageExample);
+        if (CollUtil.isNotEmpty(list)) {
+            return list.get(0);
+        }
+        return null;
+    }
+
+    private TrainStation selectByUnique(String trainCode, String name) {
+        TrainStationExample trainCarriageExample = new TrainStationExample();
+        trainCarriageExample.createCriteria().andTrainCodeEqualTo(trainCode).andNameEqualTo(name);
+        List<TrainStation> list = trainStationMapper.selectByExample(trainCarriageExample);
+        if (CollUtil.isNotEmpty(list)) {
+            return list.get(0);
+        }
+        return null;
     }
 
     public PageResp<TrainStationQueryResp> queryList(TrainStationQueryReq req) {

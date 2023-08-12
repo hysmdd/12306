@@ -1,19 +1,22 @@
 package cn.imqinhao.train.business.service;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
-import cn.imqinhao.train.business.enums.SeatColEnum;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import cn.imqinhao.train.common.resp.PageResp;
-import cn.imqinhao.train.common.util.SnowUtil;
 import cn.imqinhao.train.business.domain.TrainCarriage;
 import cn.imqinhao.train.business.domain.TrainCarriageExample;
+import cn.imqinhao.train.business.enums.SeatColEnum;
 import cn.imqinhao.train.business.mapper.TrainCarriageMapper;
 import cn.imqinhao.train.business.req.TrainCarriageQueryReq;
 import cn.imqinhao.train.business.req.TrainCarriageSaveReq;
 import cn.imqinhao.train.business.resp.TrainCarriageQueryResp;
+import cn.imqinhao.train.common.exception.BusinessException;
+import cn.imqinhao.train.common.exception.BusinessExceptionEnum;
+import cn.imqinhao.train.common.resp.PageResp;
+import cn.imqinhao.train.common.util.SnowUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +41,13 @@ public class TrainCarriageService {
 
         TrainCarriage trainCarriage = BeanUtil.copyProperties(req, TrainCarriage.class);
         if (ObjectUtil.isNull(trainCarriage.getId())) {
+
+            // 先查询当前站点是否存在
+            TrainCarriage trainCarriageDB = selectByUnique(req.getTrainCode(), req.getIndex());
+            if (ObjectUtil.isNotEmpty(trainCarriageDB)) {
+                throw new BusinessException(BusinessExceptionEnum.BUSINESS_TRAIN_CARRIAGE_INDEX_UNIQUE_ERROR);
+            }
+
             trainCarriage.setId(SnowUtil.getSnowflakeNextId());
             trainCarriage.setCreateTime(now);
             trainCarriage.setUpdateTime(now);
@@ -46,6 +56,16 @@ public class TrainCarriageService {
             trainCarriage.setUpdateTime(now);
             trainCarriageMapper.updateByPrimaryKey(trainCarriage);
         }
+    }
+
+    private TrainCarriage selectByUnique(String trainCode, Integer index) {
+        TrainCarriageExample trainCarriageExample = new TrainCarriageExample();
+        trainCarriageExample.createCriteria().andTrainCodeEqualTo(trainCode).andIndexEqualTo(index);
+        List<TrainCarriage> list = trainCarriageMapper.selectByExample(trainCarriageExample);
+        if (CollUtil.isNotEmpty(list)) {
+            return list.get(0);
+        }
+        return null;
     }
 
     public PageResp<TrainCarriageQueryResp> queryList(TrainCarriageQueryReq req) {
