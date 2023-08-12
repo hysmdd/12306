@@ -25,10 +25,6 @@ public class ServerGenerator {
     static String pomPath = "generator/pom.xml";
     static String module = "";
 
-    static {
-        new File(serverPath).mkdirs();
-    }
-
     public static void main(String[] args) throws Exception {
         // FreemarkerUtil.initConfig("test.ftl");
         // HashMap<String, Object> param = new HashMap<>();
