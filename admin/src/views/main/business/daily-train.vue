@@ -236,7 +236,9 @@ export default defineComponent({
       pagination.value.pageSize = page.pageSize;
       handleQuery({
         page: page.current,
-        size: page.pageSize
+        size: page.pageSize,
+        code: params.value.code,
+        date: params.value.date
       });
     };
 
