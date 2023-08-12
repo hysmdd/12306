@@ -8,12 +8,12 @@
     >
       <a-menu-item key="/welcome">
         <router-link to="/welcome">
-          <coffee-outlined />&nbsp; 欢迎
+          <coffee-outlined />&nbsp;&nbsp; 欢迎
         </router-link>
       </a-menu-item>
       <a-menu-item key="/about">
         <router-link to="/about">
-          <user-outlined />&nbsp; 关于
+          <user-outlined />&nbsp;&nbsp; 关于
         </router-link>
       </a-menu-item>
       <a-sub-menu key="business">
@@ -25,22 +25,22 @@
         </template>
         <a-menu-item key="/business/daily-train">
           <router-link to="/business/daily-train">
-            <merge-cells-outlined />&nbsp; 每日车次
+            <icon-font type="icon-huoche" />&nbsp;&nbsp; 每日车次
           </router-link>
         </a-menu-item>
         <a-menu-item key="/business/daily-train-station">
           <router-link to="/business/daily-train-station">
-            <merge-cells-outlined />&nbsp; 每日车站
+            <icon-font type="icon-huochezhanxiao" />&nbsp;&nbsp; 每日车站
           </router-link>
         </a-menu-item>
         <a-menu-item key="/business/daily-train-carriage">
           <router-link to="/business/daily-train-carriage">
-            <merge-cells-outlined />&nbsp; 每日车厢
+            <icon-font type="icon-lieche-chexiang" />&nbsp;&nbsp; 每日车厢
           </router-link>
         </a-menu-item>
         <a-menu-item key="/business/daily-train-seat">
           <router-link to="/business/daily-train-seat">
-            <merge-cells-outlined />&nbsp; 每日座位
+            <icon-font type="icon-zuowei1" />&nbsp;&nbsp; 每日座位
           </router-link>
         </a-menu-item>
       </a-sub-menu>
@@ -53,27 +53,27 @@
         </template>
         <a-menu-item key="/base/station">
           <router-link to="/base/station">
-            <shop-outlined />&nbsp; 车站管理
+            <icon-font type="icon-huoche" />&nbsp;&nbsp; 车站管理
           </router-link>
         </a-menu-item>
         <a-menu-item key="/base/train">
           <router-link to="/base/train">
-            <rocket-outlined />&nbsp; 火车管理
+            <icon-font type="icon-checi" />&nbsp;&nbsp; 火车管理
           </router-link>
         </a-menu-item>
         <a-menu-item key="/base/train-station">
           <router-link to="/base/train-station">
-            <coffee-outlined /> 火车车站
+            <icon-font type="icon-huochezhanxiao" />&nbsp;&nbsp; 火车车站
           </router-link>
         </a-menu-item>
         <a-menu-item key="/base/train-carriage">
           <router-link to="/base/train-carriage">
-            <car-outlined />&nbsp; 火车车厢
+            <icon-font type="icon-lieche-chexiang" />&nbsp;&nbsp; 火车车厢
           </router-link>
         </a-menu-item>
         <a-menu-item key="/base/train-seat">
           <router-link to="/base/train-seat">
-            <merge-cells-outlined />&nbsp; 火车座位
+            <icon-font type="icon-zuowei1" />&nbsp;&nbsp; 火车座位
           </router-link>
         </a-menu-item>
       </a-sub-menu>
@@ -86,7 +86,7 @@
         </template>
         <a-menu-item key="/batch/job">
           <router-link to="/batch/job">
-            <control-outlined />&nbsp; 任务管理
+            <icon-font type="icon-renwu" />&nbsp;&nbsp; 任务管理
           </router-link>
         </a-menu-item>
       </a-sub-menu>
@@ -97,6 +97,7 @@
 <script>
 import {defineComponent, ref, watch} from "vue";
 import router from "@/router";
+
 export default defineComponent({
   name: "the-sider-view",
   setup() {
@@ -107,9 +108,17 @@ export default defineComponent({
       selectedKeys.value = []
       selectedKeys.value.push(newValue)
     }, {immediate: true})
+
     return {
-      selectedKeys
+      selectedKeys,
     }
   },
 });
 </script>
+
+<style scoped>
+.icons-list :deep(.anticon) {
+  margin-right: 6px;
+  font-size: 24px;
+}
+</style>

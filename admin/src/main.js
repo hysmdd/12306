@@ -10,7 +10,7 @@ import axios from 'axios'
 import('./assets/js/enums')
 
 const IconFont = createFromIconfontCN({
-    scriptUrl: '//at.alicdn.com/t/c/font_4208356_qkl4kivv38.js',
+    scriptUrl: '//at.alicdn.com/t/c/font_4208356_tz13fnlezcc.js',
 });
 
 const app = createApp(App)
