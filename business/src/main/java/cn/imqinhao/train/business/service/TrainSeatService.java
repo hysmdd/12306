@@ -5,17 +5,17 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.imqinhao.train.business.domain.TrainCarriage;
-import cn.imqinhao.train.business.enums.SeatColEnum;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import cn.imqinhao.train.common.resp.PageResp;
-import cn.imqinhao.train.common.util.SnowUtil;
 import cn.imqinhao.train.business.domain.TrainSeat;
 import cn.imqinhao.train.business.domain.TrainSeatExample;
+import cn.imqinhao.train.business.enums.SeatColEnum;
 import cn.imqinhao.train.business.mapper.TrainSeatMapper;
 import cn.imqinhao.train.business.req.TrainSeatQueryReq;
 import cn.imqinhao.train.business.req.TrainSeatSaveReq;
 import cn.imqinhao.train.business.resp.TrainSeatQueryResp;
+import cn.imqinhao.train.common.resp.PageResp;
+import cn.imqinhao.train.common.util.SnowUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,6 +118,14 @@ public class TrainSeatService {
                 }
             }
         }
-
     }
+
+    public List<TrainSeat> selectByTrainCode(String trainCode) {
+        TrainSeatExample trainSeatExample = new TrainSeatExample();
+        trainSeatExample.setOrderByClause("train_code asc, carriage_index asc, carriage_seat_index asc");
+        TrainSeatExample.Criteria criteria = trainSeatExample.createCriteria();
+        criteria.andTrainCodeEqualTo(trainCode);
+        return trainSeatMapper.selectByExample(trainSeatExample);
+    }
+
 }
