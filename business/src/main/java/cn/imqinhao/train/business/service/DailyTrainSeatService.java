@@ -113,4 +113,14 @@ public class DailyTrainSeatService {
 
     }
 
+    public int countSeat(Date date, String trainCode, String seatType) {
+        DailyTrainSeatExample dailyTrainSeatExample = new DailyTrainSeatExample();
+        dailyTrainSeatExample.createCriteria().andDateEqualTo(date).andTrainCodeEqualTo(trainCode).andSeatTypeEqualTo(seatType);
+        long l = dailyTrainSeatMapper.countByExample(dailyTrainSeatExample);
+        if (l == 0L) {
+            return -1;
+        }
+        return (int)l;
+    }
+
 }
