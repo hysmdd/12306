@@ -5,6 +5,7 @@
       <train-select-view v-model="params.code" width="300px"></train-select-view>
       <a-button type="primary" @click="handleQuery()">搜索</a-button>
       <a-button type="primary" @click="onAdd">新增</a-button>
+      <a-button type="primary" danger @click="onClickGenDaily">手动生成车次信息</a-button>
     </a-space>
   </p>
   <a-table :dataSource="dailyTrains"
@@ -69,6 +70,14 @@
       </a-form-item>
     </a-form>
   </a-modal>
+
+  <a-modal v-model:open="genDailyVisible" title="生成车次" @ok="handleGenDailyOk" ok-text="确认" cancel-text="取消" :confirm-loading="genDailyLoading">
+    <a-form :modal="genDaily" :label-col="{span: 4}" :wrapper-col="{span: 20}">
+      <a-form-item label="日期">
+        <a-date-picker v-model:value="genDaily.date" placeholder="请选择日期" />
+      </a-form-item>
+    </a-form>
+  </a-modal>
 </template>
 
 <script>
@@ -76,6 +85,7 @@ import { defineComponent, ref, onMounted } from 'vue';
 import {notification} from "ant-design-vue";
 import axios from "axios";
 import TrainSelectView from "@/components/train-select.vue";
+import dayjs from "dayjs";
 
 export default defineComponent({
   name: "daily-train-view",
@@ -83,6 +93,7 @@ export default defineComponent({
   setup() {
     const TRAIN_TYPE_ARRAY = window.TRAIN_TYPE_ARRAY;
     const visible = ref(false);
+    const genDailyVisible = ref(false);
     let dailyTrain = ref({
       id: undefined,
       date: undefined,
@@ -97,6 +108,9 @@ export default defineComponent({
       createTime: undefined,
       updateTime: undefined,
     });
+    const genDaily = ref({
+      date: null
+    })
     const dailyTrains = ref([]);
     // 分页的三个属性名是固定的
     const pagination = ref({
@@ -105,6 +119,7 @@ export default defineComponent({
       pageSize: 10,
     });
     let loading = ref(false);
+    const genDailyLoading = ref(false)
     let params = ref({
       code: null,
       date: null
@@ -250,6 +265,29 @@ export default defineComponent({
       dailyTrain.value = Object.assign(dailyTrain.value, t)
     }
 
+    const onClickGenDaily  = () => {
+      genDailyVisible.value = true
+    }
+
+    const handleGenDailyOk = () => {
+      genDailyLoading.value = true
+      let date = dayjs(genDaily.value.date).format("YYYY-MM-DD")
+      axios.get('/business/admin/daily-train/gen-daily/' + date ).then(res => {
+        genDailyLoading.value = false
+        const data = res.data
+        if(data.success) {
+          notification.success({description: '生成成功^_^'})
+          genDailyVisible.value = false
+          handleQuery({
+            page: pagination.value.current,
+            size: pagination.value.pageSize
+          })
+        } else {
+          notification.error({description: data.message})
+        }
+      })
+    }
+
     onMounted(() => {
       handleQuery({
         page: 1,
@@ -272,7 +310,12 @@ export default defineComponent({
       onEdit,
       onDelete,
       onChangeCode,
-      params
+      params,
+      onClickGenDaily,
+      handleGenDailyOk,
+      genDailyVisible,
+      genDaily,
+      genDailyLoading
     };
   },
 });
