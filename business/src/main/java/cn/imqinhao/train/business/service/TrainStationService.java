@@ -103,9 +103,9 @@ public class TrainStationService {
     }
 
     public List<TrainStation> selectByTrainCode(String trainCode) {
-        TrainStationExample trainCarriageExample = new TrainStationExample();
-        trainCarriageExample.setOrderByClause("`index` asc");
-        trainCarriageExample.createCriteria().andTrainCodeEqualTo(trainCode);
-        return trainStationMapper.selectByExample(trainCarriageExample);
+        TrainStationExample trainStationExample = new TrainStationExample();
+        trainStationExample.setOrderByClause("`index` asc");
+        trainStationExample.createCriteria().andTrainCodeEqualTo(trainCode);
+        return trainStationMapper.selectByExample(trainStationExample);
     }
 }
