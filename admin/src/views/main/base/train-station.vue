@@ -40,13 +40,13 @@
         <a-input v-model:value="trainStation.namePinyin" disabled />
       </a-form-item>
       <a-form-item label="进站时间">
-        <a-time-picker v-model:value="trainStation.inTime" valueFormat="HH:mm:ss" placeholder="请选择时间" />
+        <a-time-picker v-model:value="trainStation.inTime" format="HH:mm" valueFormat="HH:mm" placeholder="请选择时间" style="width: 30%" />
       </a-form-item>
       <a-form-item label="出站时间">
-        <a-time-picker v-model:value="trainStation.outTime" valueFormat="HH:mm:ss" placeholder="请选择时间" />
+        <a-time-picker v-model:value="trainStation.outTime" format="HH:mm" valueFormat="HH:mm" placeholder="请选择时间" style="width: 30%" />
       </a-form-item>
       <a-form-item label="停站时长">
-        <a-time-picker v-model:value="trainStation.stopTime" valueFormat="HH:mm:ss" placeholder="请选择时间" disabled />
+        <a-time-picker v-model:value="trainStation.stopTime" format="HH:mm" valueFormat="HH:mm" placeholder="请选择时间" style="width: 30%" disabled />
       </a-form-item>
       <a-form-item label="里程（公里）">
         <a-input v-model:value="trainStation.km" />
@@ -63,6 +63,7 @@ import {pinyin} from "pinyin-pro";
 import TrainSelectView from "@/components/train-select.vue";
 import StationSelectView from "@/components/station-select.vue";
 import dayjs from 'dayjs'
+import Duration from 'dayjs/plugin/duration'
 
 export default defineComponent({
   components: {StationSelectView, TrainSelectView},
@@ -148,17 +149,21 @@ export default defineComponent({
 
     // 自动计算停车时长
     watch(() => trainStation.value.inTime, () => {
-      if(trainStation.value.inTime) {
-        let diff = dayjs(trainStation.value.outTime, 'HH:mm:ss').diff(dayjs(trainStation.value.inTime, 'HH:mm:ss'), 'seconds')
-        trainStation.value.stopTime = dayjs('00:00:00', 'HH:mm:ss').second(diff).format('HH:mm:ss')
+      if(Tool.isNotEmpty(trainStation.value.inTime) && Tool.isNotEmpty(trainStation.value.outTime)) {
+        let diff = dayjs(trainStation.value.outTime, 'HH:mm').diff(dayjs(trainStation.value.inTime, 'HH:mm'), 'seconds')
+        trainStation.value.stopTime = dayjs('00:00', 'HH:mm').second(diff).format('HH:mm')
+      } else {
+        trainStation.value.stopTime = ''
       }
     }, {immediate: true})
 
     // 自动计算停车时长
     watch(() => trainStation.value.outTime, () => {
-      if(trainStation.value.outTime) {
-        let diff = dayjs(trainStation.value.outTime, 'HH:mm:ss').diff(dayjs(trainStation.value.inTime, 'HH:mm:ss'), 'seconds')
-        trainStation.value.stopTime = dayjs('00:00:00', 'HH:mm:ss').second(diff).format('HH:mm:ss')
+      if(Tool.isNotEmpty(trainStation.value.inTime) && Tool.isNotEmpty(trainStation.value.outTime)) {
+        let diff = dayjs(trainStation.value.outTime, 'HH:mm').diff(dayjs(trainStation.value.inTime, 'HH:mm'), 'seconds')
+        trainStation.value.stopTime = dayjs('00:00', 'HH:mm').second(diff).format('HH:mm')
+      } else {
+        trainStation.value.stopTime = ''
       }
     }, {immediate: true})
 
@@ -221,6 +226,24 @@ export default defineComponent({
         let data = response.data;
         if (data.success) {
           trainStations.value = data.content.list;
+          trainStations.value.forEach(item => {
+            // 停站时长转换
+            if(Tool.isNotEmpty(item.stopTime)) {
+              const hour = item.stopTime.split(":")[0]
+              const minute = item.stopTime.split(":")[1]
+              item.stopTime = hour * 60 + +minute + "分钟";
+            } else {
+              item.stopTime = '-'
+            }
+            // 进站时间优化
+            if(Tool.isEmpty(item.inTime)) {
+              item.inTime = '始发站'
+            }
+            // 出站时间优化
+            if(Tool.isEmpty(item.outTime)) {
+              item.outTime = '终点站'
+            }
+          })
           // 设置分页控件的值
           pagination.value.current = param.page;
           pagination.value.total = data.content.total;
@@ -244,6 +267,7 @@ export default defineComponent({
         page: 1,
         size: pagination.value.pageSize
       });
+      dayjs.extend(Duration)
     });
 
     return {
