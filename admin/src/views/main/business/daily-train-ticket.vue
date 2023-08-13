@@ -1,8 +1,11 @@
 <template>
   <p>
     <a-space>
-      <a-button type="primary" @click="handleQuery()">刷新</a-button>
-      
+      <a-date-picker v-model:value="params.date" valueFormat="YYYY-MM-DD" placeholder="请选择日期" style="width: 200px" />
+      <train-select-view v-model="params.trainCode" width="300px"></train-select-view>
+      <station-select-view v-model="params.start" style="width: 300px" place-holder="请选择出发车站"></station-select-view>
+      <station-select-view v-model="params.end" style="width: 300px" place-holder="请选择到达车站"></station-select-view>
+      <a-button type="primary" @click="handleQuery()">搜索</a-button>
     </a-space>
   </p>
   <a-table :dataSource="dailyTrainTickets"
@@ -21,9 +24,12 @@
 import { defineComponent, ref, onMounted } from 'vue';
 import {notification} from "ant-design-vue";
 import axios from "axios";
+import TrainSelectView from "@/components/train-select.vue";
+import StationSelectView from "@/components/station-select.vue";
 
 export default defineComponent({
   name: "daily-train-ticket-view",
+  components: {StationSelectView, TrainSelectView},
   setup() {
     const visible = ref(false);
     let dailyTrainTicket = ref({
@@ -57,6 +63,12 @@ export default defineComponent({
       pageSize: 10,
     });
     let loading = ref(false);
+    let params = ref({
+      date: null,
+      trainCode: null,
+      start: null,
+      end: null
+    })
     const columns = [
     {
       title: '日期',
@@ -162,7 +174,11 @@ export default defineComponent({
       axios.get("/business/admin/daily-train-ticket/query-list", {
         params: {
           page: param.page,
-          size: param.size
+          size: param.size,
+          date: params.value.date,
+          trainCode: params.value.trainCode,
+          start: params.value.start,
+          end: params.value.end
         }
       }).then((response) => {
         loading.value = false;
@@ -183,7 +199,11 @@ export default defineComponent({
       pagination.value.pageSize = page.pageSize;
       handleQuery({
         page: page.current,
-        size: page.pageSize
+        size: page.pageSize,
+        date: params.value.date,
+        trainCode: params.value.trainCode,
+        start: params.value.start,
+        end: params.value.end
       });
     };
 
@@ -203,6 +223,7 @@ export default defineComponent({
       handleTableChange,
       handleQuery,
       loading,
+      params
     };
   },
 });
