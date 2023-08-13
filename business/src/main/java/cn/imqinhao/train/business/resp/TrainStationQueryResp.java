@@ -1,10 +1,11 @@
 package cn.imqinhao.train.business.resp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import java.util.Date;
-import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.math.BigDecimal;
+import java.util.Date;
 
 public class TrainStationQueryResp {
 
@@ -37,19 +38,19 @@ public class TrainStationQueryResp {
     /**
      * 进站时间
      */
-    @JsonFormat(pattern = "HH:mm:ss",timezone = "GMT+8")
+    @JsonFormat(pattern = "HH:mm",timezone = "GMT+8")
     private Date inTime;
 
     /**
      * 出站时间
      */
-    @JsonFormat(pattern = "HH:mm:ss",timezone = "GMT+8")
+    @JsonFormat(pattern = "HH:mm",timezone = "GMT+8")
     private Date outTime;
 
     /**
      * 停站时长
      */
-    @JsonFormat(pattern = "HH:mm:ss",timezone = "GMT+8")
+    @JsonFormat(pattern = "HH:mm",timezone = "GMT+8")
     private Date stopTime;
 
     /**
