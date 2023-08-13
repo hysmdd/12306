@@ -1,11 +1,11 @@
 package cn.imqinhao.train.business.req;
 
-import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import java.math.BigDecimal;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
+import java.math.BigDecimal;
+import java.util.Date;
 
 public class DailyTrainStationSaveReq {
 
@@ -48,19 +48,19 @@ public class DailyTrainStationSaveReq {
     /**
      * 进站时间
      */
-    @JsonFormat(pattern = "HH:mm:ss",timezone = "GMT+8")
+    @JsonFormat(pattern = "HH:mm",timezone = "GMT+8")
     private Date inTime;
 
     /**
      * 出站时间
      */
-    @JsonFormat(pattern = "HH:mm:ss",timezone = "GMT+8")
+    @JsonFormat(pattern = "HH:m",timezone = "GMT+8")
     private Date outTime;
 
     /**
      * 停站时长
      */
-    @JsonFormat(pattern = "HH:mm:ss",timezone = "GMT+8")
+    @JsonFormat(pattern = "HH:mm",timezone = "GMT+8")
     private Date stopTime;
 
     /**
