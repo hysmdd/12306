@@ -37,7 +37,7 @@ public class TrainQueryResp {
     /**
      * 出发时间
      */
-    @JsonFormat(pattern = "HH:mm:ss",timezone = "GMT+8")
+    @JsonFormat(pattern = "HH:mm",timezone = "GMT+8")
     private Date startTime;
 
     /**
@@ -53,7 +53,7 @@ public class TrainQueryResp {
     /**
      * 到站时间
      */
-    @JsonFormat(pattern = "HH:mm:ss",timezone = "GMT+8")
+    @JsonFormat(pattern = "HH:mm",timezone = "GMT+8")
     private Date endTime;
 
     /**

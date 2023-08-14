@@ -58,7 +58,7 @@
         <a-input v-model:value="train.startPinyin" disabled />
       </a-form-item>
       <a-form-item label="出发时间">
-        <a-time-picker v-model:value="train.startTime" valueFormat="HH:mm:ss" placeholder="请选择时间" />
+        <a-time-picker v-model:value="train.startTime" format="HH:mm" valueFormat="HH:mm" placeholder="请选择时间" />
       </a-form-item>
       <a-form-item label="终点站">
         <station-select-view v-model="train.end"></station-select-view>
@@ -67,7 +67,7 @@
         <a-input v-model:value="train.endPinyin" disabled />
       </a-form-item>
       <a-form-item label="到站时间">
-        <a-time-picker v-model:value="train.endTime" valueFormat="HH:mm:ss" placeholder="请选择时间" />
+        <a-time-picker v-model:value="train.endTime" format="HH:mm" valueFormat="HH:mm" placeholder="请选择时间" />
       </a-form-item>
     </a-form>
   </a-modal>
