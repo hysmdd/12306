@@ -17,8 +17,9 @@
     </div>
 
     <a-divider></a-divider>
-    {{passengers}}
-
+    <b>勾选要购票的乘客：</b>&nbsp;
+    <a-checkbox-group v-model:value="passengerChecks" :options="passengerOptions" /><br/>
+    选中的乘客：{{passengerChecks}}
   </div>
 </template>
 
@@ -32,6 +33,8 @@ export default defineComponent({
   name: "order-view",
   setup() {
     const passengers = ref([])
+    const passengerOptions = ref([])
+    const passengerChecks = ref([])
     const dailyTrainTicket = SessionStorage.get(SESSION_ORDER) || {};
     console.log("下单的车次信息", dailyTrainTicket);
 
@@ -56,6 +59,10 @@ export default defineComponent({
       axios.get('/member/passenger/query-mine').then(res => {
         if(res.data.success) {
           passengers.value = res.data.content
+          passengers.value.forEach(item => passengerOptions.value.push({
+            label: item.name,
+            value: item.id
+          }))
         } else {
           notification.error({description: res.data.message})
         }
@@ -69,7 +76,9 @@ export default defineComponent({
     return {
       dailyTrainTicket,
       seatTypes,
-      passengers
+      passengers,
+      passengerOptions,
+      passengerChecks
     };
   },
 });
