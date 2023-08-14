@@ -4,6 +4,8 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import cn.imqinhao.train.common.context.LoginMemberContext;
+import cn.imqinhao.train.common.exception.BusinessException;
+import cn.imqinhao.train.common.exception.BusinessExceptionEnum;
 import cn.imqinhao.train.common.resp.PageResp;
 import cn.imqinhao.train.common.util.SnowUtil;
 import cn.imqinhao.train.member.domain.Passenger;
@@ -35,6 +37,10 @@ public class PassengerService {
     public void save(PassengerSaveReq req) {
         DateTime now = DateTime.now();
         Passenger passenger = BeanUtil.copyProperties(req, Passenger.class);
+        List<PassengerQueryResp> list = queryMine();
+        if (list.size() > 50) {
+            throw new BusinessException(BusinessExceptionEnum.MEMBER_SIZE_TOO_BIG);
+        }
         // id为空，表示保存
         if (ObjectUtil.isNull(passenger.getId())) {
             passenger.setId(SnowUtil.getSnowflakeNextId());
@@ -72,5 +78,20 @@ public class PassengerService {
 
     public void delete(Long id) {
         passengerMapper.deleteByPrimaryKey(id);
+    }
+
+    /**
+     * 查询我的所有乘客
+     * @author :Martis
+     * @create :2023-08-14 12:53:56
+     * @return 我的所有乘客
+     */
+    public List<PassengerQueryResp> queryMine() {
+        PassengerExample passengerExample = new PassengerExample();
+        passengerExample.setOrderByClause("name asc");
+        PassengerExample.Criteria criteria = passengerExample.createCriteria();
+        criteria.andMemberIdEqualTo(LoginMemberContext.getId());
+        List<Passenger> list = passengerMapper.selectByExample(passengerExample);
+        return BeanUtil.copyToList(list, PassengerQueryResp.class);
     }
 }
