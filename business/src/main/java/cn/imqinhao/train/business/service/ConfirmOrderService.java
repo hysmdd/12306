@@ -3,6 +3,7 @@ package cn.imqinhao.train.business.service;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.EnumUtil;
+import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.imqinhao.train.business.domain.*;
@@ -145,11 +146,27 @@ public class ConfirmOrderService {
             }
             LOG.info("计算得到所有座位的相对第一个的偏移值：{}", offsetList);
 
-            getSeat(date, trainCode, ticketReq0.getSeatTypeCode(), ticketReq0.getSeat().split("")[0], offsetList);
+            getSeat(
+                    date,
+                    trainCode,
+                    ticketReq0.getSeatTypeCode(),
+                    ticketReq0.getSeat().split("")[0],
+                    offsetList,
+                    dailyTrainTicket.getStartIndex(),
+                    dailyTrainTicket.getEndIndex()
+                    );
         } else {
             LOG.info("本次购票没有选座");
             for (ConfirmOrderTicketReq ticket : tickets) {
-                getSeat(date, trainCode, ticket.getSeatTypeCode(), null, null);
+                getSeat(
+                        date,
+                        trainCode,
+                        ticket.getSeatTypeCode(),
+                        null,
+                        null,
+                        dailyTrainTicket.getStartIndex(),
+                        dailyTrainTicket.getEndIndex()
+                );
             }
         }
 
@@ -167,7 +184,7 @@ public class ConfirmOrderService {
             // 更新确认订单为成功
     }
 
-    private void getSeat(Date date, String trainCode, String seatType, String column, List<Integer> offsetList) {
+    private void getSeat(Date date, String trainCode, String seatType, String column, List<Integer> offsetList, Integer startIndex, Integer endIndex) {
         List<DailyTrainCarriage> carriageList = dailyTrainCarriageService.selectBySeatType(date, trainCode, seatType);
         LOG.info("共查出{}个符合条件的车厢", carriageList.size());
         // 一个车箱一个车箱的获取座位数据
@@ -175,6 +192,42 @@ public class ConfirmOrderService {
             LOG.info("开始从车厢{}选座", dailyTrainCarriage.getIndex());
             List<DailyTrainSeat> seatList = dailyTrainSeatService.selectByCarriage(date, trainCode, dailyTrainCarriage.getIndex());
             LOG.info("车厢{}的座位数：{}", dailyTrainCarriage.getIndex(), seatList.size());
+            for (DailyTrainSeat dailyTrainSeat : seatList) {
+                boolean isChoose = calSell(dailyTrainSeat, startIndex, endIndex);
+                if (isChoose) {
+                    LOG.info("选中座位");
+                    return;
+                } else {
+
+                }
+            }
+        }
+    }
+
+    /**
+     * 计算某座位在区间内是否可卖
+     * @author :Martis
+     * @create :2023-08-15 14:54:49
+     */
+    private boolean calSell(DailyTrainSeat dailyTrainSeat, Integer startIndex, Integer endIndex) {
+        String sell = dailyTrainSeat.getSell();
+        String sellPart = sell.substring(startIndex - 1, endIndex - 1);
+        if (Integer.parseInt(sellPart) > 0) {
+            LOG.info("座位{}在本次车间区间{}~{}已售过票，不可选中该座位", dailyTrainSeat.getCarriageSeatIndex(), startIndex, endIndex);
+            return false;
+        } else {
+            LOG.info("座位{}在本次车间区间{}~{}未售过票，可选中该座位", dailyTrainSeat.getCarriageSeatIndex(), startIndex, endIndex);
+            String curSell = sellPart.replace('0', '1');
+            curSell = StrUtil.fillBefore(curSell, '0', endIndex - 1);
+            curSell = StrUtil.fillAfter(curSell, '0', sell.length());
+
+            // 当前区间售票信息curSell与库里的已售信息sell按位与，即可得到该座位卖出此票后的收票情况
+            int newSellInt = NumberUtil.binaryToInt(curSell) | NumberUtil.binaryToInt(sell);
+            String newSell = NumberUtil.getBinaryStr(newSellInt);
+            newSell = StrUtil.fillBefore(newSell, '0', sell.length());
+            LOG.info("座位{}被选中，原售票信息：{}，车站区间：{}~{}，即：{}，最终售票信息：{}", dailyTrainSeat.getCarriageSeatIndex(), sell, startIndex, endIndex, curSell, newSell);
+            dailyTrainSeat.setSell(newSell);
+            return true;
         }
     }
 
