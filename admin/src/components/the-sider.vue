@@ -25,7 +25,7 @@
         </template>
         <a-menu-item key="/business/confirm-order">
           <router-link to="/business/confirm-order">
-            <icon-font type="icon-chepiao-copy-copy" />&nbsp;&nbsp; 订单信息
+            <pay-circle-outlined />&nbsp;&nbsp; 订单信息
           </router-link>
         </a-menu-item>
         <a-menu-item key="/business/daily-train-ticket">
