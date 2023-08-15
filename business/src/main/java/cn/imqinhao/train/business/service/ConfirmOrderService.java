@@ -99,7 +99,8 @@ public class ConfirmOrderService {
         confirmOrderMapper.insert(confirmOrder);
 
         // 查出余票记录，需要得到真实的库存
-        
+        DailyTrainTicket dailyTrainTicket = dailyTrainTicketService.selectByUnique(date, trainCode, start, end);
+        LOG.info("查出出票记录：{}", dailyTrainTicket);
         // 扣减余票数量，并判断余票是否足够
 
         // 选座
