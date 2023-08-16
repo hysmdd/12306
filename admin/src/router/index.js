@@ -40,6 +40,14 @@ const routes = [
           component: () => import('../views/main/batch/job.vue')
         }
       ]
+    },{
+      path: 'member/',
+      children: [
+        {
+          path: 'ticket',
+          component: () => import('../views/main/member/ticket.vue')
+        }
+      ]
     }, {
       path: 'business/',
       children: [
