@@ -1,4 +1,4 @@
-package cn.imqinhao.train.member.controller;
+package cn.imqinhao.train.member.controller.admin;
 
 import cn.imqinhao.train.common.req.MemberTicketReq;
 import cn.imqinhao.train.common.resp.CommonResp;
