@@ -20,6 +20,11 @@
           <schedule-outlined />&nbsp; 余票查询
         </router-link>
       </a-menu-item>
+      <a-menu-item key="/my-ticket">
+        <router-link to="/my-ticket">
+          <profile-outlined />&nbsp; 我的车票
+        </router-link>
+      </a-menu-item>
     </a-menu>
   </a-layout-sider>
 </template>
