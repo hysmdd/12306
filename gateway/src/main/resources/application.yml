@@ -7,7 +7,7 @@ spring:
         - id: member
           predicates:
             - Path=/member/**
-          uri: http://127.0.0.1:17676
+          uri: lb://member
         - id: business
           predicates:
             - Path=/business/**

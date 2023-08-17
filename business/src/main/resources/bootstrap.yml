@@ -2,7 +2,7 @@
 spring:
   application:
     # 注册中心的名字
-    name: member
+    name: business
   cloud:
     nacos:
       config:

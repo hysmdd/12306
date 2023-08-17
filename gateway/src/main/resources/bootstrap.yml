@@ -1,0 +1,10 @@
+# nacos server地址
+spring:
+  application:
+    # 注册中心的名字
+    name: gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848 # 注册中心地址
+        namespace: train
